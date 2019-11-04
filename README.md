@@ -38,3 +38,90 @@ dependencies {
     ......//无关配置
 }
 ```
+#### 工程代码介绍
+###### View层简介
+布局文件，引用ViewModel中的数据
+```java
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable name="vm" type="soft.wl.viewmodel.MyViewModel"/>
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="150px"
+            android:text="@{vm.ButtonText}" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="70px"
+            android:text="@{vm.ViewText}" />
+
+        <soft.wl.control.ImageBase
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="500px"
+            app:bitmap="@{vm.BitmapData}"/>
+
+        <Button
+            android:id="@+id/button_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Switch Image"
+            android:onClick="switchImage"/>
+    </LinearLayout>
+</layout>
+```
+主Activity中，获取ViewModel的实例
+```java
+mActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+mMyViewModel = ViewModelProviders.of(this).get(MyViewModel.class);
+
+if (null != mActivityMainBinding && null != mMyViewModel) {
+    mActivityMainBinding.setVm(mMyViewModel);
+    mActivityMainBinding.setLifecycleOwner(this);
+}
+```
+###### ViewModel层简介
+```java
+    public MutableLiveData<String> ButtonText = new MutableLiveData<>();
+    //首字母大写，默认绑定函数，小写默认绑定变量
+    public MutableLiveData<String> ViewText = new MutableLiveData<>();
+    public MutableLiveData<Bitmap> BitmapData = new MutableLiveData<>();
+    
+    public MutableLiveData<String> getButtonText() {
+        return modelDataAPI.getTestButtonText();
+    }
+
+    public MutableLiveData<String> getViewText() {
+        return modelDataAPI.getTestViewText();
+    }
+
+    public MutableLiveData<Bitmap> getBitmapData() {//调用model接口获取数据
+        return modelDataAPI.getTestBitmap();
+    }
+```
+###### Model层简介
+```java
+    //ModelDataAPI的实现，可调用底层接口
+    public MutableLiveData<String> getTestButtonText() {
+        return mButtonText;
+    }
+
+    public MutableLiveData<String> getTestViewText() {
+        return mViewText;
+    }
+
+    public MutableLiveData<Bitmap> getTestBitmap() {
+        return mBitmap;
+    }
+```
