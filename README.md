@@ -1,9 +1,9 @@
 # ViewBinding
 MVVM架构和DataBinding的基本使用
 #### MVVM简介
-MVVM(Model-View-ViewModel)是一种用于把数据和UI分离的设计模式，本质上就是MVC的改进版。　　
-Model用于处理应用程序数据逻辑的部分，它主要负责网络请求，数据库处理，I/O等的操作。
-View应用程序中处理数据显示的部分。在Android开发中，它一般对应着xml布局文件，Activity，Fragment。　
+MVVM(Model-View-ViewModel)是一种用于把数据和UI分离的设计模式，本质上就是MVC的改进版。  
+Model用于处理应用程序数据逻辑的部分，它主要负责网络请求，数据库处理，I/O等的操作。  
+View应用程序中处理数据显示的部分。在Android开发中，它一般对应着xml布局文件，Activity，Fragment。  
 ViewModel充当数据转换器，将Model信息转换为View 的信息，将事件从View传递到Model。
 #### MVVM优点
 * 数据驱动  
@@ -19,6 +19,10 @@ MVVM的分工是非常明显的，由于View和ViewModel之间是松散耦合的
 * 可复用性  
 一个ViewModel可以复用到多个View中。同样的一份数据，用不同的UI去做展示，对于版本迭代频繁的UI改动，只要更换View层
 就行
+#### MVVM缺点
+* 数据绑定使得调试变得困难。当你看到界面异常，有可能是你View的代码有Bug，也可能是Model的代码有问题。数据绑定使得一个位置的Bug被快速传递到别的位置，要定位原始出问题的地方就变得不那么容易了。
+* 数据双向绑定不利于代码重用。客户端开发最常用的重用是View，但是数据双向绑定技术让你的一个View都绑定了一个model，不同模块的model都不同
+* 更加大的学习成本。目前这种架构的实现方式比较不完善，常见的就是通过DataBinding来完成
 #### 工程配置
 在工程app的build.gradle配置如下
 ```java
